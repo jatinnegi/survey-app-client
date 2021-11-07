@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Dashboard from "./components/Dashboard";
+import CreateSurvey from "./components/Coordinator/CreateSurvey";
+import SurveyComplete from "./components/SurveyComplete";
+import SurveyResults from "./components/Coordinator/SurveyResults";
+import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
 
-function App() {
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import PrivateRoute from "./components/PrivateRoute";
+import SurveyResultsView from "./components/SurveyResultsView";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Router>
+        <div className="container">
+          <Switch>
+            <PrivateRoute path="/" exact component={Dashboard} />
+            <Route path="/signup" exact component={SignUp} />
+            <Route path="/signin" exact component={SignIn} />
+            <PrivateRoute
+              path="/create-survey"
+              exact
+              component={CreateSurvey}
+            />
+            <PrivateRoute
+              path="/survey/:surveyId"
+              exact
+              component={SurveyComplete}
+            />
+            <PrivateRoute
+              path="/survey-results/:surveyId"
+              exact
+              component={SurveyResults}
+            />
+            <PrivateRoute
+              path="/survey-results/:surveyId/:userId"
+              exact
+              component={SurveyResultsView}
+            />
+          </Switch>
+        </div>
+      </Router>
+    </Provider>
   );
-}
+};
 
 export default App;
